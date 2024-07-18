@@ -1,7 +1,10 @@
 import {
+  AfterContentInit,
+  afterNextRender,
+  afterRender,
   Component,
+  contentChild,
   ElementRef,
-  HostBinding,
   inject,
   input,
   ViewEncapsulation,
@@ -16,18 +19,40 @@ import {
   encapsulation: ViewEncapsulation.None,
   host: {
     class: 'control',
-    "(click)": "onClick()"
+    '(click)': 'onClick()',
   },
 })
-export class ControlComponent {
+export class ControlComponent implements AfterContentInit {
   // @HostBinding('class') className = 'control';
+
+  // @ContentChild('input') private control?: ElementRef<
+  //   HTMLInputElement | HTMLTextAreaElement
+  // >;
+
+  // constructor() {
+  //   afterRender(() => {
+  //     console.log('afterRender');
+  //   });
+
+  //   afterNextRender(() => {
+  //     console.log('afterNextRender');
+  //   });
+  // }
+
+  private control =
+    contentChild<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('input');
 
   label = input.required<string>();
 
-  private el = inject(ElementRef)
+  private el = inject(ElementRef);
 
-  onClick(){
-    console.log("Cliecked");
+  ngAfterContentInit(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  onClick() {
+    console.log('Clicked');
     console.log(this.el);
+    console.log(this.control());
   }
 }
